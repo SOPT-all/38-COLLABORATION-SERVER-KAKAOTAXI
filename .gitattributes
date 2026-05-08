@@ -1,0 +1,4 @@
+/gradlew text eol=lf linguist-generated=true
+*.bat text eol=crlf
+/gradlew.bat text eol=crlf linguist-generated=true
+*.jar binary
