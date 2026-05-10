@@ -9,5 +9,4 @@ class KakaotaxiApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
