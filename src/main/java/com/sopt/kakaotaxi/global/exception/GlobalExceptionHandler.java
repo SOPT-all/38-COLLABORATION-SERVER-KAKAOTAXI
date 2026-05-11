@@ -1,6 +1,8 @@
 package com.sopt.kakaotaxi.global.exception;
 
 import com.sopt.kakaotaxi.global.response.ApiResponse;
+import com.sopt.kakaotaxi.global.response.code.common.ErrorCode;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -14,37 +16,37 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionHandler {
 
 	private static final String DEFAULT_VALIDATION_MESSAGE = "잘못된 요청입니다.";
-	private static final String INTERNAL_SERVER_ERROR_MESSAGE = "서버 내부 오류가 발생했습니다.";
 
 	@ExceptionHandler(BusinessException.class)
 	public ResponseEntity<ApiResponse<Void>> handleBusinessException(BusinessException exception) {
-		HttpStatus status = exception.getStatus();
+		ErrorCode errorCode = exception.getErrorCode();
 
 		return ResponseEntity
-			.status(status)
-			.body(ApiResponse.fail(status, exception.getMessage()));
+			.status(errorCode.getStatus())
+			.body(ApiResponse.fail(errorCode));
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ApiResponse<Void>> handleMethodArgumentNotValidException(
 		MethodArgumentNotValidException exception
 	) {
-		HttpStatus status = HttpStatus.BAD_REQUEST;
+		ErrorCode errorCode = CommonErrorCode.INVALID_MAPPING_PARAMETER;
 		String message = extractValidationMessage(exception);
 
 		return ResponseEntity
-			.status(status)
-			.body(ApiResponse.fail(status, message));
+			.status(errorCode.getStatus())
+			.body(ApiResponse.fail(errorCode.getStatus(), errorCode.getCode(), message));
 	}
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<ApiResponse<Void>> handleException(Exception exception) {
-		HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
 		log.error("Unhandled exception occurred", exception);
 
+		ErrorCode errorCode = CommonErrorCode.INTERNAL_SERVER_ERROR;
+
 		return ResponseEntity
-			.status(status)
-			.body(ApiResponse.fail(status, INTERNAL_SERVER_ERROR_MESSAGE));
+			.status(errorCode.getStatus())
+			.body(ApiResponse.fail(errorCode));
 	}
 
 	private String extractValidationMessage(MethodArgumentNotValidException exception) {
