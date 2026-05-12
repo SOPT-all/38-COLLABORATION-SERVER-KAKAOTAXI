@@ -34,7 +34,7 @@ public class GlobalExceptionHandler {
 
 		return ResponseEntity
 			.status(errorCode.getHttpStatus())
-			.body(ApiResponse.fail(errorCode.getHttpStatus().value(), errorCode.getCode(), message));
+			.body(ApiResponse.fail(errorCode, message));
 	}
 
 	@ExceptionHandler(Exception.class)

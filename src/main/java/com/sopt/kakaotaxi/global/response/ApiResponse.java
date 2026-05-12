@@ -31,10 +31,15 @@ public record ApiResponse<T>(
 	}
 
 	public static ApiResponse<Void> fail(ErrorCode errorCode) {
-		return new ApiResponse<>(errorCode.getHttpStatus().value(), errorCode.getCode(), errorCode.getMessage(), null);
+		return fail(errorCode, errorCode.getMessage());
 	}
 
-	public static ApiResponse<Void> fail(int status, String code, String message) {
-		return new ApiResponse<>(status, code, message, null);
+	public static ApiResponse<Void> fail(ErrorCode errorCode, String message) {
+		return new ApiResponse<>(
+			errorCode.getHttpStatus().value(),
+			errorCode.getCode(),
+			message,
+			null
+		);
 	}
 }
