@@ -2,6 +2,7 @@ package com.sopt.kakaotaxi.global.response;
 
 import org.springframework.http.HttpStatus;
 
+import com.sopt.kakaotaxi.global.response.code.common.CommonSuccessCode;
 import com.sopt.kakaotaxi.global.response.code.common.ErrorCode;
 import com.sopt.kakaotaxi.global.response.code.common.SuccessCode;
 
@@ -12,15 +13,17 @@ public record ApiResponse<T>(
 	T data
 ) {
 
-	private static final String SUCCESS_CODE = "SUCCESS";
-	private static final String SUCCESS_MESSAGE = "요청에 성공했습니다.";
-
 	public static <T> ApiResponse<T> success(T data) {
-		return new ApiResponse<>(HttpStatus.OK.value(), SUCCESS_CODE, SUCCESS_MESSAGE, data);
+		SuccessCode defaultCode = CommonSuccessCode.OK;
+		return new ApiResponse<>(
+			defaultCode.getHttpStatus().value(),
+			defaultCode.getCode(),
+			defaultCode.getMessage(),
+			data);
 	}
 
 	public static ApiResponse<Void> success() {
-		return new ApiResponse<>(HttpStatus.OK.value(), SUCCESS_CODE, SUCCESS_MESSAGE, null);
+		return success(null);
 	}
 
 	public static <T> ApiResponse<T> success(SuccessCode code, T data) {
