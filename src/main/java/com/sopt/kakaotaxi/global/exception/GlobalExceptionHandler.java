@@ -5,7 +5,6 @@ import com.sopt.kakaotaxi.global.response.code.common.ErrorCode;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -22,7 +21,7 @@ public class GlobalExceptionHandler {
 		ErrorCode errorCode = exception.getErrorCode();
 
 		return ResponseEntity
-			.status(errorCode.getStatus())
+			.status(errorCode.getHttpStatus())
 			.body(ApiResponse.fail(errorCode));
 	}
 
@@ -34,8 +33,8 @@ public class GlobalExceptionHandler {
 		String message = extractValidationMessage(exception);
 
 		return ResponseEntity
-			.status(errorCode.getStatus())
-			.body(ApiResponse.fail(errorCode.getStatus(), errorCode.getCode(), message));
+			.status(errorCode.getHttpStatus())
+			.body(ApiResponse.fail(errorCode.getHttpStatus().value(), errorCode.getCode(), message));
 	}
 
 	@ExceptionHandler(Exception.class)
@@ -45,7 +44,7 @@ public class GlobalExceptionHandler {
 		ErrorCode errorCode = CommonErrorCode.INTERNAL_SERVER_ERROR;
 
 		return ResponseEntity
-			.status(errorCode.getStatus())
+			.status(errorCode.getHttpStatus())
 			.body(ApiResponse.fail(errorCode));
 	}
 

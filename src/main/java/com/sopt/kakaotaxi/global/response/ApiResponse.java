@@ -24,11 +24,11 @@ public record ApiResponse<T>(
 	}
 
 	public static <T> ApiResponse<T> success(SuccessCode code, T data) {
-		return new ApiResponse<>(code.getStatus(), code.getCode(), code.getMessage(), data);
+		return new ApiResponse<>(code.getHttpStatus().value(), code.getCode(), code.getMessage(), data);
 	}
 
 	public static ApiResponse<Void> fail(ErrorCode errorCode) {
-		return new ApiResponse<>(errorCode.getStatus(), errorCode.getCode(), errorCode.getMessage(), null);
+		return new ApiResponse<>(errorCode.getHttpStatus().value(), errorCode.getCode(), errorCode.getMessage(), null);
 	}
 
 	public static ApiResponse<Void> fail(int status, String code, String message) {
