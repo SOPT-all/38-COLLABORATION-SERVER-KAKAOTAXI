@@ -10,7 +10,7 @@ public class BusinessException extends RuntimeException {
 	private final ErrorCode errorCode;
 
 	public BusinessException(ErrorCode errorCode) {
-		super(errorCode.getMessage());
+		super(Objects.requireNonNull(errorCode, "errorCode는 필수입니다.").getMessage());
 		this.errorCode = errorCode;
 	}
 
