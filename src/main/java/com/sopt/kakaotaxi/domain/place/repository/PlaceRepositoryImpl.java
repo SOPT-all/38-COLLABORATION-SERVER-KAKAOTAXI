@@ -11,7 +11,7 @@ import com.sopt.kakaotaxi.domain.place.entity.PlaceType;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class PlaceRepositoryImpl implements PlaceRepositoryCustom { // Custom만 구현!
+public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
 
 	private final JPAQueryFactory queryFactory;
 
