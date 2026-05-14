@@ -12,6 +12,7 @@ import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,4 +34,15 @@ public class User {
 
 	@OneToMany(mappedBy = "user")
 	private List<Ride> rides = new ArrayList<>();
+
+	@Builder(access = AccessLevel.PRIVATE)
+	private User(String name) {
+		this.name = name;
+	}
+
+	public static User create(String name) {
+		return User.builder()
+			.name(name)
+			.build();
+	}
 }
