@@ -19,7 +19,7 @@ public class PlaceService {
 	private final PlaceRepository placeRepository;
 
 	public PlaceResponseDto getFavoritePlaces(Long userId) {
-		List<Place> places = placeRepository.findByUserId(userId);
+		List<Place> places = placeRepository.findFavoritePlaces(userId);
 		return PlaceResponseDto.from(places);
 	}
 }
