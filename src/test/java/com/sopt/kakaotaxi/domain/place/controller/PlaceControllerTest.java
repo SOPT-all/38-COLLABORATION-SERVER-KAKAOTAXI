@@ -39,8 +39,7 @@ class PlaceControllerTest {
 
 		mockMvc.perform(
 				get("/v1/places/favorite")
-					.contentType(MediaType.APPLICATION_JSON)
-					.content("{\"userId\": 1}")
+					.header("X-User-Id", 1L)
 			)
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.data[0]").value("우리집"))
