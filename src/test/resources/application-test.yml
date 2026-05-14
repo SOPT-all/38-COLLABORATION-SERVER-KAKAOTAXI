@@ -1,7 +1,4 @@
 spring:
-  application:
-    name: kakaotaxi
-
   datasource:
     url: jdbc:postgresql://aws-1-ap-northeast-2.pooler.supabase.com:5432/postgres?sslmode=require
     username: ${DB_USERNAME}
@@ -9,4 +6,4 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
