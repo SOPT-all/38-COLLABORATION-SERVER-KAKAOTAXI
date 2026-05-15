@@ -5,7 +5,6 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.sopt.kakaotaxi.domain.place.dto.PlaceResponseDto;
 import com.sopt.kakaotaxi.domain.place.entity.Place;
 import com.sopt.kakaotaxi.domain.place.repository.PlaceRepository;
 
@@ -18,8 +17,11 @@ public class PlaceService {
 
 	private final PlaceRepository placeRepository;
 
-	public PlaceResponseDto getFavoritePlaces(Long userId) {
+	public List<String> getFavoritePlaces(Long userId) {
 		List<Place> places = placeRepository.findFavoritePlaces(userId);
-		return PlaceResponseDto.from(places);
+
+		return places.stream()
+			.map(Place::getName)
+			.toList();
 	}
 }

@@ -1,12 +1,13 @@
 package com.sopt.kakaotaxi.domain.place.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sopt.kakaotaxi.domain.place.dto.PlaceResponseDto;
 import com.sopt.kakaotaxi.domain.place.service.PlaceService;
 import com.sopt.kakaotaxi.global.response.BaseResponse;
 
@@ -20,7 +21,7 @@ public class PlaceController {
 	private final PlaceService placeService;
 
 	@GetMapping("/favorite")
-	public ResponseEntity<BaseResponse<PlaceResponseDto>> getFavoritePlaces(@RequestHeader ("X-User-Id") Long userId) {
+	public ResponseEntity<BaseResponse<List<String>>> getFavoritePlaces(@RequestHeader ("X-User-Id") Long userId) {
 		return ResponseEntity.ok(
 			BaseResponse.success(placeService.getFavoritePlaces(userId))
 		);

@@ -11,11 +11,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.sopt.kakaotaxi.domain.place.dto.PlaceResponseDto;
 import com.sopt.kakaotaxi.domain.place.service.PlaceService;
 
 @WebMvcTest(PlaceController.class)
@@ -30,9 +28,7 @@ class PlaceControllerTest {
 	@Test
 	@DisplayName("즐겨찾기 장소 조회에 성공한다")
 	void getFavoritePlaces_success() throws Exception {
-		PlaceResponseDto response = new PlaceResponseDto(
-			List.of("우리집", "자주가는 카페")
-		);
+		List<String> response = List.of("우리집", "자주가는 카페");
 
 		given(placeService.getFavoritePlaces(1L))
 			.willReturn(response);
