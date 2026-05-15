@@ -50,23 +50,13 @@ public class Place {
 
 	@Builder(access = AccessLevel.PRIVATE)
 	private Place(String name, String address, PlaceType type,
-		Integer visitCount, User user) {
+		Integer visitCount, LocalDateTime lastVisitedAt, User user) {
 		this.name = name;
 		this.address = address;
 		this.type = type;
 		this.visitCount = visitCount;
-		this.lastVisitedAt = LocalDateTime.now();
+		this.lastVisitedAt = lastVisitedAt != null ? lastVisitedAt : LocalDateTime.now();
 		this.user = user;
-	}
-
-	public static Place createHome(String name, String address, User user) {
-		return Place.builder()
-			.name(name)
-			.address(address)
-			.type(PlaceType.HOME)
-			.visitCount(0)
-			.user(user)
-			.build();
 	}
 
 	public static Place createEtc(String name, String address, int visitCount, User user) {
@@ -75,6 +65,28 @@ public class Place {
 			.address(address)
 			.type(PlaceType.ETC)
 			.visitCount(visitCount)
+			.user(user)
+			.build();
+	}
+
+	public static Place createEtc(String name, String address, int visitCount,
+		LocalDateTime lastVisitedAt, User user) {
+		return Place.builder()
+			.name(name)
+			.address(address)
+			.type(PlaceType.ETC)
+			.visitCount(visitCount)
+			.lastVisitedAt(lastVisitedAt)
+			.user(user)
+			.build();
+	}
+
+	public static Place createHome(String name, String address, User user) {
+		return Place.builder()
+			.name(name)
+			.address(address)
+			.type(PlaceType.HOME)
+			.visitCount(0)
 			.user(user)
 			.build();
 	}

@@ -2,6 +2,7 @@ package com.sopt.kakaotaxi.domain.place.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
@@ -113,6 +114,47 @@ class PlaceRepositoryTest extends BaseRepositoryTest {
 
 			assertThat(result.get(0).getName())
 				.isEqualTo("우리집");
+		}
+
+		@Test
+		@DisplayName("방문 횟수가 같으면 최근 방문한 장소가 먼저 조회된다")
+		void same_visit_count_ordered_by_last_visited_at() {
+			// given
+			User user = userRepository.save(
+				User.create("김솝트")
+			);
+
+			placeRepository.save(
+				Place.createEtc(
+					"오래된 카페",
+					"서울 중랑구",
+					50,
+					LocalDateTime.of(2023, 1, 1, 0, 0),
+					user
+				)
+			);
+
+			placeRepository.save(
+				Place.createEtc(
+					"최근 카페",
+					"서울 광진구",
+					50,
+					LocalDateTime.of(2025, 5, 1, 0, 0),
+					user
+				)
+			);
+
+			// when
+			List<Place> result =
+				placeRepository.findFavoritePlaces(user.getId());
+
+			// then
+			assertThat(result)
+				.extracting(Place::getName)
+				.containsExactly(
+					"최근 카페",
+					"오래된 카페"
+				);
 		}
 	}
 }

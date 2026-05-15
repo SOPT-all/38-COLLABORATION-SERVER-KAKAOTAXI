@@ -22,7 +22,8 @@ public class PlaceRepositoryImpl implements PlaceRepositoryCustom {
 			.where(place.user.id.eq(userId))
 			.orderBy(
 				homeFirst(),
-				place.visitCount.desc()
+				place.visitCount.desc(),
+				place.lastVisitedAt.desc()
 			)
 			.fetch();
 	}
