@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.sopt.kakaotaxi.domain.place.dto.PlaceResponseDto;
 import com.sopt.kakaotaxi.domain.place.service.PlaceService;
+import com.sopt.kakaotaxi.global.response.BaseResponse;
 
 import lombok.RequiredArgsConstructor;
 
@@ -19,7 +20,9 @@ public class PlaceController {
 	private final PlaceService placeService;
 
 	@GetMapping("/favorite")
-	public ResponseEntity<PlaceResponseDto> getFavoritePlaces(@RequestHeader ("X-User-Id") Long userId) {
-		return ResponseEntity.ok(placeService.getFavoritePlaces(userId));
+	public ResponseEntity<BaseResponse<PlaceResponseDto>> getFavoritePlaces(@RequestHeader ("X-User-Id") Long userId) {
+		return ResponseEntity.ok(
+			BaseResponse.success(placeService.getFavoritePlaces(userId))
+		);
 	}
 }
