@@ -157,4 +157,99 @@ class PlaceRepositoryTest extends BaseRepositoryTest {
 				);
 		}
 	}
+
+	@Nested
+	@DisplayName("최근 방문 장소 조회")
+	class FindRecentPlaces {
+
+		@Test
+		@DisplayName("최근 방문 순으로 조회된다")
+		void success() {
+			// given
+			User user = userRepository.save(
+				User.create("김솝트")
+			);
+
+			placeRepository.save(
+				Place.createEtc(
+					"한사랑병원",
+					"서울시 송파구",
+					3,
+					LocalDateTime.of(2026, 5, 9, 16, 46, 0),
+					user
+				)
+			);
+
+			placeRepository.save(
+				Place.createEtc(
+					"강남구 보건소",
+					"서울시 강남구",
+					1,
+					LocalDateTime.of(2026, 5, 9, 14, 0, 0),
+					user
+				)
+			);
+
+			placeRepository.save(
+				Place.createHome(
+					"우리집",
+					"서울시 성동구",
+					user
+				)
+			);
+
+			// when
+			List<Place> result =
+				placeRepository.findByUserIdOrderByLastVisitedAtDesc(user.getId());
+
+			// then
+			assertThat(result)
+				.extracting(Place::getName)
+				.containsExactly(
+					"한사랑병원",
+					"강남구 보건소"
+				);
+		}
+
+		@Test
+		@DisplayName("다른 사용자의 장소는 조회되지 않는다")
+		void exclude_other_user_places() {
+			// given
+			User user1 = userRepository.save(
+				User.create("김솝트")
+			);
+
+			User user2 = userRepository.save(
+				User.create("이솝트")
+			);
+
+			placeRepository.save(
+				Place.createEtc(
+					"한사랑병원",
+					"서울시 송파구",
+					3,
+					LocalDateTime.of(2026, 5, 9, 16, 46, 0),
+					user1
+				)
+			);
+
+			placeRepository.save(
+				Place.createEtc(
+					"강남구 보건소",
+					"서울시 강남구",
+					1,
+					LocalDateTime.of(2026, 5, 9, 14, 0, 0),
+					user2
+				)
+			);
+
+			// when
+			List<Place> result =
+				placeRepository.findByUserIdOrderByLastVisitedAtDesc(user1.getId());
+
+			// then
+			assertThat(result).hasSize(1);
+			assertThat(result.get(0).getName()).isEqualTo("한사랑병원");
+		}
+	}
 }
