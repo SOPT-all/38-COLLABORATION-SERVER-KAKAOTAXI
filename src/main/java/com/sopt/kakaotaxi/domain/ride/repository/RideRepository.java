@@ -2,6 +2,7 @@
 package com.sopt.kakaotaxi.domain.ride.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,4 +13,7 @@ public interface RideRepository extends JpaRepository<Ride, Long> {
 
 	@EntityGraph(attributePaths = "taxi")
 	List<Ride> findAllByUserIdAndDestinationId(Long userId, Long destinationId);
+
+	@EntityGraph(attributePaths = "taxi")
+	Optional<Ride> findFirstByUserIdAndTaxiId(Long userId, Long taxiId);
 }
