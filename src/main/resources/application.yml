@@ -10,3 +10,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+
+springdoc:
+  swagger-ui:
+    url: /v3/api-docs
+  use-management-port: false
