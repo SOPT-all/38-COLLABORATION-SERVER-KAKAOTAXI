@@ -31,4 +31,14 @@ public class Taxi {
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false, length = 20)
 	private TaxiType type;
+
+	private Taxi(String plateNumber, String driverName, TaxiType type) {
+		this.plateNumber = plateNumber;
+		this.driverName = driverName;
+		this.type = type;
+	}
+
+	public static Taxi create(String plateNumber, String driverName, TaxiType type) {
+		return new Taxi(plateNumber, driverName, type);
+	}
 }
