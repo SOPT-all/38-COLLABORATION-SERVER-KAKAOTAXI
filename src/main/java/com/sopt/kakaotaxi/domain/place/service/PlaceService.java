@@ -27,7 +27,7 @@ public class PlaceService {
 	}
 
 	public List<RecentPlaceResponse> getRecentPlaces(Long userId) {
-		List<Place> places = placeRepository.findByUserIdOrderByLastVisitedAtDesc(userId);
+		List<Place> places = placeRepository.findTop4ByUserIdOrderByLastVisitedAtDesc(userId);
 
 		return places.stream()
 			.map(RecentPlaceResponse::from)

@@ -201,7 +201,7 @@ class PlaceRepositoryTest extends BaseRepositoryTest {
 
 			// when
 			List<Place> result =
-				placeRepository.findByUserIdOrderByLastVisitedAtDesc(user.getId());
+				placeRepository.findTop4ByUserIdOrderByLastVisitedAtDesc(user.getId());
 
 			// then
 			assertThat(result)
@@ -247,11 +247,41 @@ class PlaceRepositoryTest extends BaseRepositoryTest {
 
 			// when
 			List<Place> result =
-				placeRepository.findByUserIdOrderByLastVisitedAtDesc(user1.getId());
+				placeRepository.findTop4ByUserIdOrderByLastVisitedAtDesc(user1.getId());
 
 			// then
 			assertThat(result).hasSize(1);
 			assertThat(result.get(0).getName()).isEqualTo("한사랑병원");
 		}
+	}
+
+	@Test
+	@DisplayName("최근 방문 장소는 최대 4개만 조회된다")
+	void limit_to_four() {
+		// given
+		User user = userRepository.save(
+			User.create("김솝트")
+		);
+
+		placeRepository.save(Place.createEtc("장소1", "서울시 강남구", 1,
+			LocalDateTime.of(2026, 5, 9, 16, 0, 0), user));
+		placeRepository.save(Place.createEtc("장소2", "서울시 강남구", 1,
+			LocalDateTime.of(2026, 5, 9, 15, 0, 0), user));
+		placeRepository.save(Place.createEtc("장소3", "서울시 강남구", 1,
+			LocalDateTime.of(2026, 5, 9, 14, 0, 0), user));
+		placeRepository.save(Place.createEtc("장소4", "서울시 강남구", 1,
+			LocalDateTime.of(2026, 5, 9, 13, 0, 0), user));
+		placeRepository.save(Place.createEtc("장소5", "서울시 강남구", 1,
+			LocalDateTime.of(2026, 5, 9, 12, 0, 0), user));
+
+		// when
+		List<Place> result =
+			placeRepository.findTop4ByUserIdOrderByLastVisitedAtDesc(user.getId());
+
+		// then
+		assertThat(result).hasSize(4);
+		assertThat(result)
+			.extracting(Place::getName)
+			.containsExactly("장소1", "장소2", "장소3", "장소4");
 	}
 }
