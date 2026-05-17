@@ -43,4 +43,15 @@ public class Ride {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "destination_place_id", nullable = false)
 	private Place destination;
+
+	private Ride(BigDecimal fare, User user, Taxi taxi, Place destination) {
+		this.fare = fare;
+		this.user = user;
+		this.taxi = taxi;
+		this.destination = destination;
+	}
+
+	public static Ride create(BigDecimal fare, User user, Taxi taxi, Place destination) {
+		return new Ride(fare, user, taxi, destination);
+	}
 }
