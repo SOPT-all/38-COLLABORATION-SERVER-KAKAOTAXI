@@ -4,12 +4,15 @@ package com.sopt.kakaotaxi.domain.ride.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sopt.kakaotaxi.domain.ride.dto.RideTaxiDetailResponse;
 import com.sopt.kakaotaxi.domain.ride.dto.RideTaxiRequest;
 import com.sopt.kakaotaxi.domain.ride.dto.RideTaxiResponse;
 import com.sopt.kakaotaxi.domain.ride.service.RideService;
@@ -32,6 +35,18 @@ public class RideController {
 		return ResponseEntity.ok(
 			BaseResponse.success(
 				rideService.getRideTaxis(userId, request.placeId())
+			)
+		);
+	}
+
+	@GetMapping("/{taxi_id}")
+	public ResponseEntity<BaseResponse<RideTaxiDetailResponse>> getRideTaxiDetail(
+		@RequestHeader("X-User-Id") Long userId,
+		@PathVariable("taxi_id") Long taxiId
+	) {
+		return ResponseEntity.ok(
+			BaseResponse.success(
+				rideService.getRideTaxiDetail(userId, taxiId)
 			)
 		);
 	}

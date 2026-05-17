@@ -17,6 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.sopt.kakaotaxi.domain.place.entity.Place;
+import com.sopt.kakaotaxi.domain.ride.dto.RideTaxiDetailResponse;
 import com.sopt.kakaotaxi.domain.ride.dto.RideTaxiResponse;
 import com.sopt.kakaotaxi.domain.ride.entity.Ride;
 import com.sopt.kakaotaxi.domain.ride.repository.RideRepository;
@@ -39,10 +40,22 @@ class RideServiceTest {
 		User user = User.create("김솝트");
 		Place destination = Place.createEtc("회사", "서울 중구", 10, user);
 
-		Taxi regularTaxi = Taxi.create("12가1234", "김기사", TaxiType.REGULAR_TAXI);
+		Taxi regularTaxi = Taxi.create(
+			"12가1234",
+			"김기사",
+			TaxiType.REGULAR_TAXI,
+			"쏘나타",
+			"검정"
+		);
 		ReflectionTestUtils.setField(regularTaxi, "id", 1L);
 
-		Taxi largeTaxi = Taxi.create("34나5678", "박기사", TaxiType.LARGE_TAXI);
+		Taxi largeTaxi = Taxi.create(
+			"34나5678",
+			"박기사",
+			TaxiType.LARGE_TAXI,
+			"스타리아",
+			"흰색"
+		);
 		ReflectionTestUtils.setField(largeTaxi, "id", 2L);
 
 		given(rideRepository.findAllByUserIdAndDestinationId(1L, 10L))
@@ -63,5 +76,35 @@ class RideServiceTest {
 				tuple(1L, "일반택시", "12000"),
 				tuple(2L, "대형택시", "18000")
 			);
+	}
+
+	@Test
+	@DisplayName("선택한 택시의 상세 정보를 응답으로 변환한다")
+	void getRideTaxiDetail_success() {
+		User user = User.create("김솝트");
+		Place destination = Place.createEtc("회사", "서울 중구", 10, user);
+
+		Taxi taxi = Taxi.create(
+			"12가1234",
+			"김기사",
+			TaxiType.REGULAR_TAXI,
+			"쏘나타",
+			"검정"
+		);
+		ReflectionTestUtils.setField(taxi, "id", 1L);
+
+		given(rideRepository.findFirstByUserIdAndTaxiId(1L, 1L))
+			.willReturn(java.util.Optional.of(
+				Ride.create(new BigDecimal("12000"), user, taxi, destination)
+			));
+
+		RideTaxiDetailResponse result = rideService.getRideTaxiDetail(1L, 1L);
+
+		assertThat(result.taxiId()).isEqualTo(1L);
+		assertThat(result.taxiType()).isEqualTo("일반택시");
+		assertThat(result.modelName()).isEqualTo("쏘나타");
+		assertThat(result.modelColor()).isEqualTo("검정");
+		assertThat(result.plateNumber()).isEqualTo("12가1234");
+		assertThat(result.driverName()).isEqualTo("김기사");
 	}
 }

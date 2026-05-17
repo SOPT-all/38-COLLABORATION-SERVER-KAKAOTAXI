@@ -32,13 +32,23 @@ public class Taxi {
 	@Column(nullable = false, length = 20)
 	private TaxiType type;
 
-	private Taxi(String plateNumber, String driverName, TaxiType type) {
+	@Column(nullable = false, length = 50)
+	private String modelName;
+
+	@Column(nullable = false, length = 30)
+	private String modelColor;
+
+	private Taxi(String plateNumber, String driverName, TaxiType type,
+		String modelName, String modelColor) {
 		this.plateNumber = plateNumber;
 		this.driverName = driverName;
 		this.type = type;
+		this.modelName = modelName;
+		this.modelColor = modelColor;
 	}
 
-	public static Taxi create(String plateNumber, String driverName, TaxiType type) {
-		return new Taxi(plateNumber, driverName, type);
+	public static Taxi create(String plateNumber, String driverName, TaxiType type,
+		String modelName, String modelColor) {
+		return new Taxi(plateNumber, driverName, type, modelName, modelColor);
 	}
 }
