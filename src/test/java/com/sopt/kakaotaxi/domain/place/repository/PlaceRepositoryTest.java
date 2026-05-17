@@ -194,6 +194,7 @@ class PlaceRepositoryTest extends BaseRepositoryTest {
 				Place.createHome(
 					"우리집",
 					"서울시 성동구",
+					LocalDateTime.of(2026, 5, 8, 10, 0, 0), // 가장 오래된 시간 → 마지막 순서
 					user
 				)
 			);
@@ -207,7 +208,8 @@ class PlaceRepositoryTest extends BaseRepositoryTest {
 				.extracting(Place::getName)
 				.containsExactly(
 					"한사랑병원",
-					"강남구 보건소"
+					"강남구 보건소",
+					"우리집"
 				);
 		}
 

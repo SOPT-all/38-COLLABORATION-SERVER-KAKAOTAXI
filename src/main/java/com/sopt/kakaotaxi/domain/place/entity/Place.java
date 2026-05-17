@@ -90,4 +90,15 @@ public class Place {
 			.user(user)
 			.build();
 	}
+
+	public static Place createHome(String name, String address, LocalDateTime lastVisitedAt, User user) {
+		return Place.builder()
+			.name(name)
+			.address(address)
+			.type(PlaceType.HOME)
+			.visitCount(0)
+			.lastVisitedAt(lastVisitedAt)
+			.user(user)
+			.build();
+	}
 }
