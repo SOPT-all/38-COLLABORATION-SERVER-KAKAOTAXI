@@ -4,7 +4,6 @@ package com.sopt.kakaotaxi.domain.ride.controller;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -42,7 +41,7 @@ class RideControllerTest {
 			.willReturn(response);
 
 		mockMvc.perform(
-				post("/v1/rides")
+				get("/v1/rides")
 					.header("X-User-Id", 1L)
 			)
 			.andExpect(status().isOk())
@@ -60,7 +59,7 @@ class RideControllerTest {
 	@DisplayName("택시 호출 후보 조회 시 사용자 ID 헤더가 없으면 실패한다")
 	void getRideTaxis_withoutUserIdHeader_fail() throws Exception {
 		mockMvc.perform(
-				post("/v1/rides")
+				get("/v1/rides")
 			)
 			.andExpect(status().isBadRequest());
 	}

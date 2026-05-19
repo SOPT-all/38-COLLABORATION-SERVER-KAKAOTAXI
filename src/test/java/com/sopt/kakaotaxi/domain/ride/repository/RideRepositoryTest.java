@@ -3,7 +3,6 @@ package com.sopt.kakaotaxi.domain.ride.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -62,16 +61,16 @@ class RideRepositoryTest extends BaseRepositoryTest {
 		);
 
 		rideRepository.save(
-			Ride.create(new BigDecimal("12000"), user, regularTaxi, destination)
+			Ride.create("12,000", user, regularTaxi, destination)
 		);
 		rideRepository.save(
-			Ride.create(new BigDecimal("18000"), user, largeTaxi, destination)
+			Ride.create("18,000", user, largeTaxi, destination)
 		);
 		rideRepository.save(
-			Ride.create(new BigDecimal("25000"), user, premiumTaxi, otherDestination)
+			Ride.create("25,000", user, premiumTaxi, otherDestination)
 		);
 		rideRepository.save(
-			Ride.create(new BigDecimal("9000"), otherUser, safeTaxi, destination)
+			Ride.create("9,000", otherUser, safeTaxi, destination)
 		);
 
 		List<Ride> result = rideRepository.findAll();
@@ -79,10 +78,10 @@ class RideRepositoryTest extends BaseRepositoryTest {
 		assertThat(result)
 			.extracting(Ride::getFare)
 			.containsExactlyInAnyOrder(
-				new BigDecimal("12000"),
-				new BigDecimal("18000"),
-				new BigDecimal("25000"),
-				new BigDecimal("9000")
+				"12,000",
+				"18,000",
+				"25,000",
+				"9,000"
 			);
 		assertThat(result)
 			.extracting(ride -> ride.getTaxi().getType())
@@ -109,10 +108,10 @@ class RideRepositoryTest extends BaseRepositoryTest {
 		);
 
 		rideRepository.save(
-			Ride.create(new BigDecimal("12000"), user, taxi, destination)
+			Ride.create("12,000", user, taxi, destination)
 		);
 		rideRepository.save(
-			Ride.create(new BigDecimal("9000"), otherUser, taxi, destination)
+			Ride.create("9,000", otherUser, taxi, destination)
 		);
 
 		Optional<Ride> result = rideRepository.findFirstByUserIdAndTaxiId(

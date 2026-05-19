@@ -5,7 +5,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.groups.Tuple.tuple;
 import static org.mockito.BDDMockito.given;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import org.junit.jupiter.api.DisplayName;
@@ -72,9 +71,9 @@ class RideServiceTest {
 
 		given(rideRepository.findAll())
 			.willReturn(List.of(
-				Ride.create(new BigDecimal("7800"), user, regularTaxi, destination),
-				Ride.create(new BigDecimal("18000"), user, largeTaxi, otherDestination),
-				Ride.create(new BigDecimal("25000"), otherUser, premiumTaxi, otherUserDestination)
+				Ride.create("7,800", user, regularTaxi, destination),
+				Ride.create("18,000", user, largeTaxi, otherDestination),
+				Ride.create("25,000", otherUser, premiumTaxi, otherUserDestination)
 			));
 
 		List<RideTaxiResponse> result = rideService.getRideTaxis();
@@ -109,7 +108,7 @@ class RideServiceTest {
 
 		given(rideRepository.findFirstByUserIdAndTaxiId(1L, 1L))
 			.willReturn(java.util.Optional.of(
-				Ride.create(new BigDecimal("12000"), user, taxi, destination)
+				Ride.create("12,000", user, taxi, destination)
 			));
 
 		RideTaxiDetailResponse result = rideService.getRideTaxiDetail(1L, 1L);
