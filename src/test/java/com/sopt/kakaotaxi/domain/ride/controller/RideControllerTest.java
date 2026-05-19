@@ -2,6 +2,7 @@
 package com.sopt.kakaotaxi.domain.ride.controller;
 
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.then;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -13,12 +14,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.sopt.kakaotaxi.domain.ride.dto.RideTaxiResponse;
 import com.sopt.kakaotaxi.domain.ride.dto.RideTaxiDetailResponse;
+import com.sopt.kakaotaxi.domain.ride.dto.RideTaxiResponse;
 import com.sopt.kakaotaxi.domain.ride.service.RideService;
 
 @WebMvcTest(RideController.class)
@@ -38,18 +38,12 @@ class RideControllerTest {
 			new RideTaxiResponse(2L, "대형택시", "18000")
 		);
 
-		given(rideService.getRideTaxis(1L, 10L))
+		given(rideService.getRideTaxis())
 			.willReturn(response);
 
 		mockMvc.perform(
 				post("/v1/rides")
 					.header("X-User-Id", 1L)
-					.contentType(MediaType.APPLICATION_JSON)
-					.content("""
-						{
-						  "placeId": 10
-						}
-						""")
 			)
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.data[0].taxiId").value(1L))
@@ -58,6 +52,8 @@ class RideControllerTest {
 			.andExpect(jsonPath("$.data[1].taxiId").value(2L))
 			.andExpect(jsonPath("$.data[1].taxiType").value("대형택시"))
 			.andExpect(jsonPath("$.data[1].estimatedFare").value("18000"));
+
+		then(rideService).should().getRideTaxis();
 	}
 
 	@Test

@@ -38,7 +38,10 @@ class RideServiceTest {
 	@DisplayName("Ride의 택시 정보와 예상 요금을 응답으로 변환한다")
 	void getRideTaxis_success() {
 		User user = User.create("김솝트");
+		User otherUser = User.create("이솝트");
 		Place destination = Place.createEtc("회사", "서울 중구", 10, user);
+		Place otherDestination = Place.createEtc("카페", "서울 마포구", 5, user);
+		Place otherUserDestination = Place.createEtc("집", "서울 강남구", 3, otherUser);
 
 		Taxi regularTaxi = Taxi.create(
 			"12가1234",
@@ -58,13 +61,23 @@ class RideServiceTest {
 		);
 		ReflectionTestUtils.setField(largeTaxi, "id", 2L);
 
-		given(rideRepository.findAllByUserIdAndDestinationId(1L, 10L))
+		Taxi premiumTaxi = Taxi.create(
+			"56다9012",
+			"최기사",
+			TaxiType.PREMIUM_TAXI,
+			"K9",
+			"검정"
+		);
+		ReflectionTestUtils.setField(premiumTaxi, "id", 3L);
+
+		given(rideRepository.findAll())
 			.willReturn(List.of(
 				Ride.create(new BigDecimal("12000"), user, regularTaxi, destination),
-				Ride.create(new BigDecimal("18000"), user, largeTaxi, destination)
+				Ride.create(new BigDecimal("18000"), user, largeTaxi, otherDestination),
+				Ride.create(new BigDecimal("25000"), otherUser, premiumTaxi, otherUserDestination)
 			));
 
-		List<RideTaxiResponse> result = rideService.getRideTaxis(1L, 10L);
+		List<RideTaxiResponse> result = rideService.getRideTaxis();
 
 		assertThat(result)
 			.extracting(
@@ -74,7 +87,8 @@ class RideServiceTest {
 			)
 			.containsExactly(
 				tuple(1L, "일반택시", "12000"),
-				tuple(2L, "대형택시", "18000")
+				tuple(2L, "대형택시", "18000"),
+				tuple(3L, "프리미엄택시", "25000")
 			);
 	}
 
