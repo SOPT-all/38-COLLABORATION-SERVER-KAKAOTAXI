@@ -8,7 +8,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -29,7 +28,7 @@ public class RideController {
 	private final RideService rideService;
 
 	@Operation(summary = "택시 호출 후보 조회", description = "호출 가능한 모든 택시 후보를 조회합니다.")
-	@PostMapping
+	@GetMapping
 	public ResponseEntity<BaseResponse<List<RideTaxiResponse>>> getRideTaxis(
 		@Parameter(description = "사용자 ID", example = "1", required = true)
 		@RequestHeader("X-User-Id") Long userId

@@ -1,10 +1,7 @@
 // 택시 호출 후보 조회 비즈니스 로직을 처리하는 서비스
 package com.sopt.kakaotaxi.domain.ride.service;
 
-import java.math.BigDecimal;
-import java.text.NumberFormat;
 import java.util.List;
-import java.util.Locale;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,13 +41,8 @@ public class RideService {
 		return new RideTaxiResponse(
 			ride.getTaxi().getId(),
 			ride.getTaxi().getType().getDisplayName(),
-			formatFare(ride.getFare())
+			ride.getFare()
 		);
-	}
-
-	private String formatFare(BigDecimal fare) {
-		NumberFormat fareFormat = NumberFormat.getIntegerInstance(Locale.KOREA);
-		return fareFormat.format(fare);
 	}
 
 	private RideTaxiDetailResponse toDetailResponse(Taxi taxi) {

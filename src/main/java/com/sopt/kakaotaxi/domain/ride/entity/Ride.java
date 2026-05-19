@@ -14,7 +14,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.math.BigDecimal;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,8 +28,8 @@ public class Ride {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
 
-	@Column(nullable = false, precision = 10, scale = 2)
-	private BigDecimal fare;
+	@Column(nullable = false, length = 20)
+	private String fare;
 
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "user_id", nullable = false)
@@ -44,14 +43,14 @@ public class Ride {
 	@JoinColumn(name = "destination_place_id", nullable = false)
 	private Place destination;
 
-	private Ride(BigDecimal fare, User user, Taxi taxi, Place destination) {
+	private Ride(String fare, User user, Taxi taxi, Place destination) {
 		this.fare = fare;
 		this.user = user;
 		this.taxi = taxi;
 		this.destination = destination;
 	}
 
-	public static Ride create(BigDecimal fare, User user, Taxi taxi, Place destination) {
+	public static Ride create(String fare, User user, Taxi taxi, Place destination) {
 		return new Ride(fare, user, taxi, destination);
 	}
 }
