@@ -72,7 +72,7 @@ class RideServiceTest {
 
 		given(rideRepository.findAll())
 			.willReturn(List.of(
-				Ride.create(new BigDecimal("12000"), user, regularTaxi, destination),
+				Ride.create(new BigDecimal("7800"), user, regularTaxi, destination),
 				Ride.create(new BigDecimal("18000"), user, largeTaxi, otherDestination),
 				Ride.create(new BigDecimal("25000"), otherUser, premiumTaxi, otherUserDestination)
 			));
@@ -86,9 +86,9 @@ class RideServiceTest {
 				RideTaxiResponse::estimatedFare
 			)
 			.containsExactly(
-				tuple(1L, "일반택시", "12000"),
-				tuple(2L, "대형택시", "18000"),
-				tuple(3L, "프리미엄택시", "25000")
+				tuple(1L, "일반택시", "7,800"),
+				tuple(2L, "대형택시", "18,000"),
+				tuple(3L, "프리미엄택시", "25,000")
 			);
 	}
 

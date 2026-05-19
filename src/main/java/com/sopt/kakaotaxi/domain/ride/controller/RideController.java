@@ -30,7 +30,10 @@ public class RideController {
 
 	@Operation(summary = "택시 호출 후보 조회", description = "호출 가능한 모든 택시 후보를 조회합니다.")
 	@PostMapping
-	public ResponseEntity<BaseResponse<List<RideTaxiResponse>>> getRideTaxis() {
+	public ResponseEntity<BaseResponse<List<RideTaxiResponse>>> getRideTaxis(
+		@Parameter(description = "사용자 ID", example = "1", required = true)
+		@RequestHeader("X-User-Id") Long userId
+	) {
 		return ResponseEntity.ok(
 			BaseResponse.success(
 				rideService.getRideTaxis()
