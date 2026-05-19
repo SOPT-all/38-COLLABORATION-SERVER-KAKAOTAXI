@@ -23,8 +23,8 @@ public class RideService {
 
 	private final RideRepository rideRepository;
 
-	public List<RideTaxiResponse> getRideTaxis(Long userId, Long placeId) {
-		return rideRepository.findAllByUserIdAndDestinationId(userId, placeId)
+	public List<RideTaxiResponse> getRideTaxis() {
+		return rideRepository.findAll()
 			.stream()
 			.map(this::toResponse)
 			.toList();

@@ -11,8 +11,9 @@ import com.sopt.kakaotaxi.domain.ride.entity.Ride;
 
 public interface RideRepository extends JpaRepository<Ride, Long> {
 
+	@Override
 	@EntityGraph(attributePaths = "taxi")
-	List<Ride> findAllByUserIdAndDestinationId(Long userId, Long destinationId);
+	List<Ride> findAll();
 
 	@EntityGraph(attributePaths = "taxi")
 	Optional<Ride> findFirstByUserIdAndTaxiId(Long userId, Long taxiId);

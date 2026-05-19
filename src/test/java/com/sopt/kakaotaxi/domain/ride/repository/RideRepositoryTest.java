@@ -36,8 +36,8 @@ class RideRepositoryTest extends BaseRepositoryTest {
 	private TestEntityManager entityManager;
 
 	@Test
-	@DisplayName("사용자와 목적지에 맞는 택시 호출 후보를 조회한다")
-	void findAllByUserIdAndDestinationId_success() {
+	@DisplayName("모든 택시 호출 후보를 조회한다")
+	void findAll_success() {
 		User user = userRepository.save(User.create("김솝트"));
 		User otherUser = userRepository.save(User.create("이솝트"));
 
@@ -57,6 +57,9 @@ class RideRepositoryTest extends BaseRepositoryTest {
 		Taxi premiumTaxi = entityManager.persistAndFlush(
 			Taxi.create("56다9012", "최기사", TaxiType.PREMIUM_TAXI, "K9", "검정")
 		);
+		Taxi safeTaxi = entityManager.persistAndFlush(
+			Taxi.create("78라3456", "정기사", TaxiType.SAFE_TAXI, "아이오닉", "회색")
+		);
 
 		rideRepository.save(
 			Ride.create(new BigDecimal("12000"), user, regularTaxi, destination)
@@ -68,25 +71,26 @@ class RideRepositoryTest extends BaseRepositoryTest {
 			Ride.create(new BigDecimal("25000"), user, premiumTaxi, otherDestination)
 		);
 		rideRepository.save(
-			Ride.create(new BigDecimal("9000"), otherUser, regularTaxi, destination)
+			Ride.create(new BigDecimal("9000"), otherUser, safeTaxi, destination)
 		);
 
-		List<Ride> result = rideRepository.findAllByUserIdAndDestinationId(
-			user.getId(),
-			destination.getId()
-		);
+		List<Ride> result = rideRepository.findAll();
 
 		assertThat(result)
 			.extracting(Ride::getFare)
 			.containsExactlyInAnyOrder(
 				new BigDecimal("12000"),
-				new BigDecimal("18000")
+				new BigDecimal("18000"),
+				new BigDecimal("25000"),
+				new BigDecimal("9000")
 			);
 		assertThat(result)
 			.extracting(ride -> ride.getTaxi().getType())
 			.containsExactlyInAnyOrder(
 				TaxiType.REGULAR_TAXI,
-				TaxiType.LARGE_TAXI
+				TaxiType.LARGE_TAXI,
+				TaxiType.PREMIUM_TAXI,
+				TaxiType.SAFE_TAXI
 			);
 	}
 
