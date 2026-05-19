@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -35,6 +36,17 @@ public class GlobalExceptionHandler {
 		return ResponseEntity
 			.status(errorCode.getHttpStatus())
 			.body(BaseResponse.fail(errorCode, message));
+	}
+
+	@ExceptionHandler(MissingRequestHeaderException.class)
+	public ResponseEntity<BaseResponse<Void>> handleMissingRequestHeaderException(
+		MissingRequestHeaderException exception
+	) {
+		ErrorCode errorCode = CommonErrorCode.INVALID_REQUEST_VARIABLE;
+
+		return ResponseEntity
+			.status(errorCode.getHttpStatus())
+			.body(BaseResponse.fail(errorCode));
 	}
 
 	@ExceptionHandler(Exception.class)

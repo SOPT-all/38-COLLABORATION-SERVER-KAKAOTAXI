@@ -34,8 +34,8 @@ class RideControllerTest {
 	@DisplayName("택시 호출 후보 조회에 성공한다")
 	void getRideTaxis_success() throws Exception {
 		List<RideTaxiResponse> response = List.of(
-			new RideTaxiResponse(1L, "일반택시", "12000"),
-			new RideTaxiResponse(2L, "대형택시", "18000")
+			new RideTaxiResponse(1L, "일반택시", "12,000"),
+			new RideTaxiResponse(2L, "대형택시", "18,000")
 		);
 
 		given(rideService.getRideTaxis())
@@ -48,12 +48,21 @@ class RideControllerTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.data[0].taxiId").value(1L))
 			.andExpect(jsonPath("$.data[0].taxiType").value("일반택시"))
-			.andExpect(jsonPath("$.data[0].estimatedFare").value("12000"))
+			.andExpect(jsonPath("$.data[0].estimatedFare").value("12,000"))
 			.andExpect(jsonPath("$.data[1].taxiId").value(2L))
 			.andExpect(jsonPath("$.data[1].taxiType").value("대형택시"))
-			.andExpect(jsonPath("$.data[1].estimatedFare").value("18000"));
+			.andExpect(jsonPath("$.data[1].estimatedFare").value("18,000"));
 
 		then(rideService).should().getRideTaxis();
+	}
+
+	@Test
+	@DisplayName("택시 호출 후보 조회 시 사용자 ID 헤더가 없으면 실패한다")
+	void getRideTaxis_withoutUserIdHeader_fail() throws Exception {
+		mockMvc.perform(
+				post("/v1/rides")
+			)
+			.andExpect(status().isBadRequest());
 	}
 
 	@Test
